@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evora — Smart EV Charging</title>
+    <meta name="description" content="Evora is an intelligent EV charging optimization platform powered by fuzzy logic inference.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◆</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- ═══════ NAVBAR ═══════ -->
+    <nav class="navbar" id="navbar">
+        <a href="#home" class="nav-brand">
+            <span class="nav-logo">◆</span>
+            <span class="nav-title">Evora</span>
+        </a>
+        <div class="nav-links" id="navLinks">
+            <a href="#home" class="nav-link active">Home</a>
+            <a href="#scheduler" class="nav-link">Scheduler</a>
+            <a href="#about" class="nav-link">About</a>
+            <a href="#contact" class="nav-link">Contact Us</a>
+        </div>
+        <div class="nav-right">
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+            <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">
+                <span class="theme-icon">☀️</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ═══════ HERO ═══════ -->
+    <section id="home" class="hero">
+        <h1 class="hero-title">Evora</h1>
+        <p class="hero-tagline">THE WORLD'S LEADING NEW SMART EV CHARGING SYSTEM</p>
+        <p class="hero-stats">22 kW max output · 20 fuzzy rules · real-time inference</p>
+        <a href="#scheduler" class="hero-cta">Schedule Now</a>
+    </section>
+
+    <!-- ═══════ FEATURES ═══════ -->
+    <section class="section features-section">
+        <div class="features-row">
+            <div class="feature">
+                <h3 class="feature-title">Adaptive Scheduling</h3>
+                <p class="feature-text">Adjusts charging power dynamically based on current grid conditions, battery state, and how soon you need the car.</p>
+            </div>
+            <div class="feature">
+                <h3 class="feature-title">Tariff Optimization</h3>
+                <p class="feature-text">Finds the cheapest windows to charge by factoring in time-of-use electricity pricing and demand patterns.</p>
+            </div>
+            <div class="feature">
+                <h3 class="feature-title">Battery Preservation</h3>
+                <p class="feature-text">Manages charge rates to extend battery lifespan — no unnecessary fast-charging when there's time to spare.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════ SCHEDULER ═══════ -->
+    <section id="scheduler" class="section">
+        <h2 class="section-heading">Scheduler</h2>
+
+        <div class="slider-grid">
+            <div class="input-group">
+                <label class="input-label" for="soc-slider">State of Charge</label>
+                <input type="range" id="soc-slider" min="0" max="100" value="35" class="slider">
+                <div class="input-readout"><span id="soc-value">35</span><span class="input-unit">%</span></div>
+            </div>
+            <div class="input-group">
+                <label class="input-label" for="price-slider">Grid Tariff</label>
+                <input type="range" id="price-slider" min="0" max="50" value="20" class="slider">
+                <div class="input-readout"><span id="price-value">20</span><span class="input-unit">¢/kWh</span></div>
+            </div>
+            <div class="input-group">
+                <label class="input-label" for="time-slider">Time to Departure</label>
+                <input type="range" id="time-slider" min="0" max="24" value="8" class="slider">
+                <div class="input-readout"><span id="time-value">8</span><span class="input-unit">hours</span></div>
+            </div>
+        </div>
+
+        <div class="result" id="result-card">
+            <p class="result-label">Recommended Output</p>
+            <p class="result-value" id="result-power">—</p>
+            <p class="result-unit">kW</p>
+            <span class="result-badge" id="result-badge">—</span>
+        </div>
+
+        <div class="readout-row">
+            <div class="readout"><span class="readout-val" id="metric-soc">35%</span><span class="readout-label">Battery</span></div>
+            <div class="readout"><span class="readout-val" id="metric-price">20$</span><span class="readout-label">Tariff</span></div>
+            <div class="readout"><span class="readout-val" id="metric-time">8h</span><span class="readout-label">Departure</span></div>
+            <div class="readout"><span class="readout-val" id="metric-power">—</span><span class="readout-label">kW Output</span></div>
+        </div>
+
+        <div class="charts-panel">
+            <button class="charts-toggle" id="chartsToggle" type="button">
+                Membership Function Analysis
+                <span class="toggle-arrow" id="toggleIcon">▸</span>
+            </button>
+            <div class="charts-grid" id="chartsGrid">
+                <canvas id="chart-soc"></canvas>
+                <canvas id="chart-price"></canvas>
+                <canvas id="chart-time"></canvas>
+                <canvas id="chart-power"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════ ABOUT ═══════ -->
+    <section id="about" class="section about-section">
+        <h2 class="section-heading">How It Works</h2>
+
+        <div class="about-prose">
+            <p>
+                Evora uses a Mamdani-type fuzzy inference engine to figure out the best charging
+                power for your EV. It looks at three things: how much charge your battery has,
+                what electricity costs right now, and when you need to leave. From that, it
+                recommends a power level between 0 and 22 kW.
+            </p>
+            <p>
+                The engine runs 20 fuzzy rules on triangular membership functions. Each input
+                gets split into three categories (like Low / Medium / High), and the rules handle
+                everything from "battery is nearly dead and you're leaving in an hour" to "battery
+                is full and electricity is expensive — don't bother." Centroid defuzzification
+                turns the fuzzy result back into a concrete number.
+            </p>
+        </div>
+
+        <h3 class="sub-heading">Variable Specification</h3>
+        <div class="table-wrap">
+            <table class="spec-table">
+                <thead><tr><th>Variable</th><th>Range</th><th>Terms</th><th>Role</th></tr></thead>
+                <tbody>
+                    <tr><td>SOC</td><td>0 – 100 %</td><td>Low · Medium · High</td><td><span class="tag tag-input">INPUT</span></td></tr>
+                    <tr><td>Price</td><td>0 – 50 ¢/kWh</td><td>Low · Medium · High</td><td><span class="tag tag-input">INPUT</span></td></tr>
+                    <tr><td>Time</td><td>0 – 24 h</td><td>Short · Medium · Long</td><td><span class="tag tag-input">INPUT</span></td></tr>
+                    <tr><td>Charge Power</td><td>0 – 22 kW</td><td>Low · Medium · High</td><td><span class="tag tag-output">OUTPUT</span></td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <p class="tech-line">Built with Python 3, scikit-fuzzy, NumPy, SciPy, and Flask</p>
+    </section>
+
+    <!-- ═══════ CONTACT ═══════ -->
+    <section id="contact" class="section">
+        <h2 class="section-heading">Get In Touch</h2>
+
+        <div class="contact-grid">
+            <form class="contact-form" id="contactForm">
+                <div class="field">
+                    <label for="contact-name">Name</label>
+                    <input type="text" id="contact-name" required>
+                </div>
+                <div class="field">
+                    <label for="contact-email">Email</label>
+                    <input type="email" id="contact-email" required>
+                </div>
+                <div class="field">
+                    <label for="contact-subject">Subject</label>
+                    <input type="text" id="contact-subject">
+                </div>
+                <div class="field">
+                    <label for="contact-message">Message</label>
+                    <textarea id="contact-message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="send-btn" id="submitBtn">Send Message</button>
+            </form>
+
+            <aside class="contact-aside">
+                <div class="contact-item">
+                    <span class="contact-label">Email</span>
+                    <span class="contact-value">ayushvermaofficial04@gmail.com</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">Location</span>
+                    <span class="contact-value">Lucknow, India</span>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-label">Follow Us</span>
+                    <span class="contact-value"></span>
+                </div>
+            </aside>
+        </div>
+    </section>
+
+    <!-- ═══════ FOOTER ═══════ -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="footer-copy">Evora © 2026</span>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
