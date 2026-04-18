@@ -1,5 +1,6 @@
 /**
  * app.js — Evora frontend logic
+ * Light Mode Only.
  */
 
 function debounce(fn, ms) {
@@ -11,24 +12,6 @@ const $ = (s) => document.querySelector(s);
 const socSlider   = $('#soc-slider');
 const priceSlider = $('#price-slider');
 const timeSlider  = $('#time-slider');
-
-/* ── Theme ── */
-const themeBtn  = $('#themeToggle');
-const themeIcon = themeBtn.querySelector('.theme-icon');
-
-function setTheme(theme) {
-    document.documentElement.dataset.theme = theme;
-    themeIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
-    localStorage.setItem('evora-theme', theme);
-    if (Object.keys(charts).length) createCharts();
-}
-
-themeBtn.addEventListener('click', () => {
-    setTheme(document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark');
-});
-
-const saved = localStorage.getItem('evora-theme');
-if (saved) setTheme(saved);
 
 /* ── Mobile menu ── */
 const hamburger = $('#hamburger');
@@ -60,7 +43,7 @@ function updateDisplays() {
     $('#price-value').textContent = priceSlider.value;
     $('#time-value').textContent  = timeSlider.value;
     $('#metric-soc').textContent   = socSlider.value + '%';
-    $('#metric-price').textContent = priceSlider.value + '¢';
+    $('#metric-price').textContent = priceSlider.value + '$';
     $('#metric-time').textContent  = timeSlider.value + 'h';
     [socSlider, priceSlider, timeSlider].forEach(fillSlider);
 }
@@ -97,11 +80,10 @@ let membershipData = null;
 let charts = {};
 
 function chartColors() {
-    const dk = document.documentElement.dataset.theme === 'dark';
     return {
-        lines: [dk ? '#34d399' : '#059669', dk ? '#a78bfa' : '#7c3aed', '#f472b6'],
-        text:  dk ? '#666' : '#888',
-        grid:  dk ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.05)',
+        lines: ['#059669', '#7c3aed', '#f472b6'],
+        text:  '#4b5563',
+        grid:  'rgba(0,0,0,0.06)',
     };
 }
 
@@ -131,13 +113,13 @@ function createCharts() {
                 animation: { duration: 300 },
                 plugins: {
                     title: { display: true, text: titles[i], color: c.text,
-                             font: { family: 'Inter', size: 11, weight: '500' } },
+                             font: { family: 'Inter', size: 12, weight: '500' } },
                     legend: { labels: { color: c.text,
-                              font: { family: 'Inter', size: 10 }, boxWidth: 10 } },
+                              font: { family: 'Inter', size: 11 }, boxWidth: 10 } },
                 },
                 scales: {
-                    x: { grid: { color: c.grid }, ticks: { color: c.text, font: { size: 9 } } },
-                    y: { grid: { color: c.grid }, ticks: { color: c.text, font: { size: 9 } },
+                    x: { grid: { color: c.grid }, ticks: { color: c.text, font: { size: 10 } } },
+                    y: { grid: { color: c.grid }, ticks: { color: c.text, font: { size: 10 } },
                          min: -0.05, max: 1.1 },
                 },
             },
@@ -161,11 +143,41 @@ $('#chartsToggle').addEventListener('click', () => {
 });
 
 /* ── Contact form ── */
-$('#contactForm').addEventListener('submit', (e) => {
+const form = document.getElementById('contactForm');
+const submitBtn = document.getElementById('submitBtn');
+
+form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const btn = $('#submitBtn');
-    btn.textContent = '✓ Sent'; btn.disabled = true;
-    setTimeout(() => { btn.textContent = 'Send Message'; btn.disabled = false; e.target.reset(); }, 2000);
+
+    const formData = new FormData(form);
+    formData.append("access_key", "71864be5-9511-4e5b-8235-0fb77d6896a3");
+
+    const originalText = submitBtn.textContent;
+
+    submitBtn.textContent = "Sending...";
+    submitBtn.disabled = true;
+
+    try {
+        const response = await fetch("https://api.web3forms.com/submit", {
+            method: "POST",
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert("Success! Your message has been sent.");
+            form.reset();
+        } else {
+            alert("Error: " + data.message);
+        }
+
+    } catch (error) {
+        alert("Something went wrong. Please try again.");
+    } finally {
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
 });
 
 /* ── Init ── */
