@@ -1,7 +1,3 @@
-/**
- * app.js — Evora frontend logic
- * Light Mode Only.
- */
 
 function debounce(fn, ms) {
     let t;
