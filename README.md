@@ -9,7 +9,7 @@ This project uses a **Mamdani-type fuzzy inference system** to determine the opt
 | Input              | Range       | Description                              |
 |--------------------|-------------|------------------------------------------|
 | **SOC**            | 0 – 100 %   | Current battery state of charge          |
-| **Electricity Price** | 0 – 50 ¢/kWh | Current grid electricity cost          |
+| **Electricity Price** | 0 – 50 $/kWh | Current grid electricity cost          |
 | **Departure Time** | 0 – 24 h    | Hours until the EV is needed             |
 
 The system outputs a **Charge Power** value (0–22 kW) classified into three tiers:
